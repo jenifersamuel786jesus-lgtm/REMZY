@@ -1,7 +1,6 @@
 # Welcome to Your RemZy Project
 RemZy Application Link URL
-    URL:https://medo.dev/projects/app-8p4wg9i9nchs
-
+   
 # RemZy - Alzheimer's Care Application
 
 RemZy is a comprehensive mobile-first web application designed to support Alzheimer's patients through real-time memory assistance, safety monitoring, and emotional support. The system operates across two strictly separated device modes (Patient Mode and Caregiver Mode) with secure device linking.
