@@ -1,5 +1,3 @@
-const DEFAULT_APP_ID = "app-8p4wg9i9nchs";
-
 function readEnv(name: keyof ImportMetaEnv): string | undefined {
   const value = import.meta.env[name];
   if (typeof value !== "string") {
@@ -25,13 +23,6 @@ export function getSupabaseAnonKey(): string {
   return getRequiredEnv("VITE_SUPABASE_ANON_KEY");
 }
 
-export function getAppId(): string {
-  const value = readEnv("VITE_APP_ID");
-  if (!value) {
-    console.warn(
-      `VITE_APP_ID is missing, using fallback APP_ID: ${DEFAULT_APP_ID}`
-    );
-    return DEFAULT_APP_ID;
-  }
-  return value;
+export function getGeminiApiKey(): string {
+  return getRequiredEnv("VITE_GEMINI_API_KEY");
 }

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Send, MessageCircle } from 'lucide-react';
 import { getPatientByProfileId, getAIInteractions, createAIInteraction } from '@/db/api';
-import { getAppId } from '@/lib/env';
+import { getGeminiApiKey } from '@/lib/env';
 import type { Patient, AIInteraction } from '@/types/types';
 import { useWhisper } from '@/hooks/use-whisper';
 
@@ -84,8 +84,8 @@ export default function AICompanionPage() {
 
   const getAIResponse = async (userMessage: string, patient: Patient): Promise<string> => {
     try {
-      const APP_ID = getAppId();
-      const API_URL = `https://api-integrations.appmedo.com/${APP_ID}/api-rLob8RdzAOl9/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse`;
+      const GEMINI_API_KEY = getGeminiApiKey();
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`;
 
       console.log('🤖 AI Chat: Sending request to API');
       console.log('User message:', userMessage);
@@ -134,7 +134,6 @@ Respond in a warm, helpful, and reassuring manner.`;
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-App-Id': APP_ID,
         },
         body: JSON.stringify({
           contents: [{

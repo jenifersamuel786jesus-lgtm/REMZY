@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Camera, CameraOff, Volume2, VolumeX, User, AlertCircle } from 'lucide-react';
 import { getPatientByProfileId, getKnownFaces, createKnownFace, updateKnownFace, createUnknownEncounter } from '@/db/api';
-import { getAppId } from '@/lib/env';
+import { getGeminiApiKey } from '@/lib/env';
 import type { Patient, KnownFace } from '@/types/types';
 import { useToast } from '@/hooks/use-toast';
 import * as faceapi from 'face-api.js';
@@ -690,9 +690,9 @@ export default function PatientFaceRecognitionPage() {
     try {
       setAiAnalyzing(true);
       
-      const APP_ID = getAppId();
+      const GEMINI_API_KEY = getGeminiApiKey();
       console.log('🤖 AI Analysis starting...');
-      console.log('APP_ID:', APP_ID);
+      console.log('Gemini key configured:', !!GEMINI_API_KEY);
       console.log('Is known person:', isKnown);
       console.log('Person name:', personName);
       console.log('Image size:', imageBase64.length);
@@ -729,14 +729,13 @@ Example: "A new person is standing nearby wearing a blue shirt and glasses, look
 Keep it to 1-2 short, natural sentences. Be calm and reassuring.`;
 
       console.log('📤 Sending request to Gemini API...');
-      const API_URL = `https://api-integrations.appmedo.com/${APP_ID}/api-rLob8RdzAOl9/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse`;
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`;
       const response = await fetch(
         API_URL,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-App-Id': APP_ID,
           },
           body: JSON.stringify({
             contents: [
