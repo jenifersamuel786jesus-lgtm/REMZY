@@ -10,30 +10,21 @@ export default function ModeSelectionPage() {
   const { profile, refreshProfile, signOut } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const deviceModeStorageKey = profile ? `remzy_device_mode:${profile.id}` : null;
 
   useEffect(() => {
-    if (!profile || !deviceModeStorageKey) return;
-
-    // Device mode is locked per user per device (local storage)
-    const storedMode = localStorage.getItem(deviceModeStorageKey);
-    if (storedMode === 'patient') {
+    // If device mode is already locked in the profile, redirect
+    if (profile?.device_mode === 'patient') {
       navigate('/patient/dashboard', { replace: true });
-    } else if (storedMode === 'caregiver') {
+    } else if (profile?.device_mode === 'caregiver') {
       navigate('/caregiver/dashboard', { replace: true });
     }
-  }, [profile, deviceModeStorageKey, navigate]);
+  }, [profile, navigate]);
 
   const handleModeSelection = async (mode: 'patient' | 'caregiver') => {
     if (!profile) return;
     
     setLoading(true);
     
-    // Lock device mode locally for this user + device
-    if (deviceModeStorageKey) {
-      localStorage.setItem(deviceModeStorageKey, mode);
-    }
-
     // Update profile with selected device mode (kept for server-side reporting)
     await updateProfile(profile.id, { device_mode: mode });
     await refreshProfile();
